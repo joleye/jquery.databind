@@ -108,8 +108,15 @@ require(['jquery'], function () {
 
     $.fn.databindValue = function () {
         var val = $(this).data('value');
-        $(this).val(val).trigger('select');
-        $(this).find('input[type=radio][value=' + val + ']').prop('checked', true);
+        if (val) {
+            var arr = (val+'').split(',');
+            var $this = $(this);
+            $.each(arr, function (i, v) {
+                $this.val(v).trigger('select');
+                $this.find('input[type=radio][value=' + v + ']').prop('checked', true);
+                $this.find('input[type=checkbox][value=' + v + ']').prop('checked', true);
+            });
+        }
     };
 
     var runners = [];
