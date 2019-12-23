@@ -8,6 +8,7 @@ require(['jquery'], function () {
             method: $(this).data('method') || 'POST',
             children: $(this).data('children'),
             param: $(this).data('param') || {},
+            afterCreate: $(this).data('after_create') || null
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -23,8 +24,11 @@ require(['jquery'], function () {
                 $(this).empty();
                 bind(this.conf.rows, get_tpl_text(this), this, this.conf.children, 0);
             }
-        } else {
+            $(this).databindValue(this.conf);
+        } else if (this.conf.url) {
             ajax.apply(this);
+        } else {
+            $(this).databindValue(this.conf);
         }
     };
 
@@ -41,7 +45,7 @@ require(['jquery'], function () {
                         $(that).empty();
                     }
                     bind(res.rows, tpl_text, that, that.conf.children, 0);
-                    $(that).databindValue();
+                    $(that).databindValue(that.conf);
                 }
             }
         });
@@ -95,9 +99,6 @@ require(['jquery'], function () {
                     bind(val[children], tpl_text, that, children, depth + 1);
                 }
             });
-            if (that.conf && that.conf.afterCreate) {
-                that.conf.afterCreate.apply(that);
-            }
         }
     }
 
@@ -106,25 +107,34 @@ require(['jquery'], function () {
         return str.substring(0, depth * 5);
     }
 
-    $.fn.databindValue = function () {
+    $.fn.databindValue = function (conf) {
         var val = $(this).data('value');
-        if (val) {
-            var arr = (val+'').split(',');
-            var $this = $(this);
-            $.each(arr, function (i, v) {
-                $this.val(v).trigger('select');
-                $this.find('input[type=radio][value=' + v + ']').prop('checked', true);
-                $this.find('input[type=checkbox][value=' + v + ']').prop('checked', true);
-            });
+        var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
+        if (typeof val != 'undefined' && val != null && val != '') {
+            var databindCreate = $(this).data('databind_create');
+            if(databindCreate){
+                window[databindCreate].apply(this);
+            }else {
+                var arr = (val + '').split(',');
+                var $this = $(this);
+                $.each(arr, function (i, v) {
+                    $this.val(v).trigger('select');
+                    $this.find('input[type=radio][value=' + v + ']').prop('checked', true);
+                    $this.find('input[type=checkbox][value=' + v + ']').prop('checked', true);
+                });
+            }
+        }
+
+        if (typeof afterCreate == 'function') {
+            afterCreate.apply(this);
+        } else if (afterCreate) {
+            window[afterCreate].apply(this);
         }
     };
 
     var runners = [];
 
     $('.databind').each(function () {
-        if ($(this).attr('data-value')) {
-            $(this).databindValue();
-        }
         runners.push(this);
     });
 
@@ -136,7 +146,7 @@ require(['jquery'], function () {
             $(that).databind();
             setTimeout(function () {
                 runner(i + 1);
-            }, 200);
+            }, 10);
         }
     }
 
