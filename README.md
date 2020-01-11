@@ -24,3 +24,9 @@ $('#complain-option').databind('load', {
 });
 
 ```
+
+3. d-if 选择性显示
+```html
+<div d-if="status != null">
+</div>
+```

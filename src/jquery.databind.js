@@ -94,12 +94,52 @@ require(['jquery'], function () {
                     var reg = new RegExp('@{this}', 'g');
                     html = html.replace(reg, val.trim());
                 }
-                $(html).appendTo($(that)).data('row', val);
+                var $item = $(html).appendTo($(that)).data('row', val);
+                bind_event($item, val);
                 if (children && val[children]) {
                     bind(val[children], tpl_text, that, children, depth + 1);
                 }
             });
         }
+    }
+
+    function bind_event($this, data){
+        if($this.attr('d-if')){
+            d_if($this, data);
+        }
+        $this.find('[d-if]').each(function () {
+            d_if($(this), data);
+        });
+    }
+
+    function d_if($this, data){
+        var dif = $this.attr('d-if');
+        var is_ok = (new Function("",stringify(data)+";return "+dif))();
+        if(!is_ok){
+            $this.remove();
+        }
+        $this.removeAttr('d-if');
+    }
+
+    function stringify(data){
+        var line = [];
+        $.each(data, function (k, val) {
+            var actual_val = null;
+            if(typeof val == 'string'){
+                actual_val = '"'+val+'"';
+            }else if(val == null){
+                actual_val = val;
+            }else if(val == ''){
+                actual_val = '""';
+            }else if(typeof val == 'object'){
+                console.log('not support ->'+(typeof val)+' '+val);
+                return;
+            }else{
+                actual_val = val;
+            }
+            line.push('var '+k+'='+actual_val);
+        });
+        return line.join(';');
     }
 
     function getDepth(depth) {
