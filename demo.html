@@ -27,6 +27,11 @@
         <span>${gender}</span>
         <span>${time}</span>
         <span d-if="status != null">${status}</span>
+        <span d-if="tree != null">
+            <select name="tree">
+                <option d-for="tree" value="#{id}">#{name}</option>
+            </select>
+        </span>
     </li>
 </script>
 <script type="text/javascript">

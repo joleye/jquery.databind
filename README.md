@@ -30,3 +30,10 @@ $('#complain-option').databind('load', {
 <div d-if="status != null">
 </div>
 ```
+
+4. d-for 循环
+```html
+<div d-for="tree">
+#{name}
+</div>
+```
