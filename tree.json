@@ -20,6 +20,7 @@
       "gender": "女",
       "time": "2020-1-3 10:10",
       "status": [],
+      "value": 2,
       "tree": [
         {
           "id": 1,
@@ -27,7 +28,8 @@
         },
         {
           "id": 2,
-          "name": "李四"
+          "name": "李四",
+          "checked": "selected"
         },
         {
           "id": 3,

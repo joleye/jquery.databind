@@ -29,7 +29,7 @@
         <span d-if="status != null">${status}</span>
         <span d-if="tree != null">
             <select name="tree">
-                <option d-for="tree" value="#{id}">#{name}</option>
+                <option d-for="tree" value="#{id}" #{checked}>#{name}</option>
             </select>
         </span>
     </li>
