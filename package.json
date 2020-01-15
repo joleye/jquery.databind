@@ -1,0 +1,11 @@
+{
+  "name": "databind",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "gulp": "^4.0.2"
+  }
+}

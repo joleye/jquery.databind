@@ -208,7 +208,12 @@ require(['jquery'], function () {
     var runners = [];
 
     $('.databind').each(function () {
-        runners.push(this);
+        var wait = typeof $(this).data('wait') != 'undefined' ? $(this).data('wait') : 10;
+        if(wait > 0) {
+            runners.push({value : this, wait: wait});
+        }else{
+            $(this).databind();
+        }
     });
 
     runner(0);
@@ -216,10 +221,10 @@ require(['jquery'], function () {
     function runner(i) {
         if (i < runners.length) {
             var that = runners[i];
-            $(that).databind();
+            $(that.value).databind();
             setTimeout(function () {
                 runner(i + 1);
-            }, 10);
+            }, that.wait);
         }
     }
 

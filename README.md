@@ -1,5 +1,21 @@
 ### this is jquery databind plugs
 
+##参数介绍
+wait：延迟时间，单位毫秒，默认10毫秒
+
+url：数据接口地址
+
+tpl：模板id
+
+method：请求方法，GET、POST，默认POST
+
+param：数据接口请求参数
+
+createAfter：接口回调方法，注意：html里面为data-after_create
+
+rows：数据
+
+
 
 1.方法1
 
@@ -8,7 +24,9 @@
      data-url="dataUrl"
      data-tpl="usage"
      data-method="POST"
+     data-after_create="afterCreate"
      data-param='{"startDate":"${param.start_date}","endDate":"${param.end_date}"}'
+     data-wait="10"
 >
 </div>
 ```
