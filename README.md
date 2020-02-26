@@ -1,6 +1,6 @@
 ### this is jquery databind plugs
 
-##参数介绍
+## 参数介绍
 wait：延迟时间，单位毫秒，默认10毫秒
 
 url：数据接口地址
@@ -15,9 +15,15 @@ createAfter：接口回调方法，注意：html里面为data-after_create
 
 rows：数据
 
+## 内置变量
+@{index} 行号，从1开始编号
+@{depth} 深度，有子节点时有效，默认：--|
+@{this} 当前节点值
 
 
-1.方法1
+
+## 使用方法
+方法1
 
 ```html
 <div class="data-container databind"
@@ -31,7 +37,7 @@ rows：数据
 </div>
 ```
 
-2. 方法2
+方法2
 ```javascript
 $('#complain-option').databind('load', {
     tpl:'tpl-id',//模板id
@@ -43,13 +49,14 @@ $('#complain-option').databind('load', {
 
 ```
 
-3. d-if 选择性显示
+## 表达式
+d-if 选择性显示
 ```html
 <div d-if="status != null">
 </div>
 ```
 
-4. d-for 循环
+d-for 循环
 ```html
 <div d-for="tree">
 #{name}

@@ -68,8 +68,9 @@ require(['jquery'], function () {
 
     function bind(rows, tpl_text, that, children, depth) {
         if (rows) {
+            var index = 1;
             $.each(rows, function (key, val) {
-                var html = getCommonTpl(tpl_text, key, val, '\\$', depth);
+                var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
                 if (children && val[children]) {
@@ -79,7 +80,7 @@ require(['jquery'], function () {
         }
     }
     
-    function getCommonTpl(tpl_text, key, val, headTag, depth){
+    function getCommonTpl(tpl_text, key, val, headTag, depth, index){
         var html = tpl_text;
         var regGlobal = new RegExp(headTag+'\\{[\\w\\|]+\\}', 'g');
         var mat = html.match(regGlobal);
@@ -106,6 +107,10 @@ require(['jquery'], function () {
         if (html.indexOf('@{depth}') > -1) {
             var reg = new RegExp('@{depth}', 'g');
             html = html.replace(reg, getDepth(depth));
+        }
+        if (html.indexOf('@{index}') > -1) {
+            var reg = new RegExp('@{index}', 'g');
+            html = html.replace(reg, index);
         }
         if (html.indexOf('@{this}') > -1) {
             var reg = new RegExp('@{this}', 'g');
@@ -141,9 +146,10 @@ require(['jquery'], function () {
         'd-for': function ($this, data, attrValue) {
             var treeData = data[attrValue.trim()];
             if(treeData instanceof Array) {
+                var index = 1;
                 $.each(treeData, function (i, val) {
                     var tpl_text = $this.prop("outerHTML");
-                    var html = getCommonTpl(tpl_text, i, val, '\\#', null);
+                    var html = getCommonTpl(tpl_text, i, val, '\\#', null, index++);
                     var $item = $(html).appendTo($this.parent()).data('row', val);
                     $item.removeAttr('d-for');
                 });
