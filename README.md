@@ -11,7 +11,9 @@ method：请求方法，GET、POST，默认POST
 
 param：数据接口请求参数
 
-createAfter：接口回调方法，注意：html里面为data-after_create
+afterCreate：接口回调方法，注意：html里面为data-after_create
+
+beforeCreate：创建之前回调方法，注意：html里面为data-before_create
 
 rows：数据
 

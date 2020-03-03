@@ -12,7 +12,8 @@ require(['jquery'], function () {
             method: $(this).data('method') || 'POST',
             children: $(this).data('children'),
             param: $(this).data('param') || {},
-            afterCreate: $(this).data('after_create') || null
+            afterCreate: $(this).data('after_create') || null,
+            beforeCreate: $(this).data('before_create') || null,
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -26,7 +27,7 @@ require(['jquery'], function () {
         if (!this.conf.url) {
             if (this.conf.rows) {
                 $(this).empty();
-                bind(this.conf.rows, getTplText(this), this, this.conf.children, 0);
+                bind(this.conf.rows, getTplText(this), this, this.conf, 0);
             }
             $(this).databindValue(this.conf);
         } else if (this.conf.url) {
@@ -48,7 +49,7 @@ require(['jquery'], function () {
                     if ('reload' == that.conf.act) {
                         $(that).empty();
                     }
-                    bind(res.rows, tpl_text, that, that.conf.children, 0);
+                    bind(res.rows, tpl_text, that, that.conf, 0);
                     $(that).databindValue(that.conf);
                 }
             }
@@ -66,15 +67,17 @@ require(['jquery'], function () {
         return tpl_text;
     }
 
-    function bind(rows, tpl_text, that, children, depth) {
+    function bind(rows, tpl_text, that, options, depth) {
+        var children = options.children;
         if (rows) {
             var index = 1;
             $.each(rows, function (key, val) {
+                window[options.beforeCreate] && window[options.beforeCreate](val);
                 var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
                 if (children && val[children]) {
-                    bind(val[children], tpl_text, that, children, depth + 1);
+                    bind(val[children], tpl_text, that, options, depth + 1);
                 }
             });
         }

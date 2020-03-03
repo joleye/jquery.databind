@@ -18,14 +18,16 @@
 </head>
 <body>
 <ul class="databind"
-     data-url="tree.json" data-tpl="tree-tpl">
+    data-url="tree.json"
+    data-tpl="tree-tpl"
+    data-before_create="init">
 
 </ul>
 <script type="text/html" id="tree-tpl">
     <li>
         <span>${name}</span>
         <span>${gender}</span>
-        <span>${time}</span>
+        <span>${time}-${date}</span>
         <span d-if="status != null">${status}</span>
         <span d-if="tree != null">
             <select name="tree">
@@ -35,6 +37,9 @@
     </li>
 </script>
 <script type="text/javascript">
+function init(params){
+    params['date'] = new Date().getTime();
+}
 require(['databind'], function () {
 
 });
