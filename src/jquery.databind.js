@@ -72,7 +72,7 @@ require(['jquery'], function () {
         if (rows) {
             var index = 1;
             $.each(rows, function (key, val) {
-                window[options.beforeCreate] && window[options.beforeCreate](val);
+                window[options.beforeCreate] && window[options.beforeCreate](val, index);
                 var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
