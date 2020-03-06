@@ -13,7 +13,7 @@ require(['jquery'], function () {
             children: $(this).data('children'),
             param: $(this).data('param') || {},
             afterCreate: $(this).data('after_create') || null,
-            beforeCreate: $(this).data('before_create') || null,
+            beforeCreate: $(this).data('before_create') || null
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -37,7 +37,7 @@ require(['jquery'], function () {
         }
     };
 
-    function ajax(cb) {
+    function ajax() {
         var that = this;
         $.ajax({
             type: this.conf.method,
@@ -46,7 +46,7 @@ require(['jquery'], function () {
             success: function (res) {
                 if (res.status) {
                     var tpl_text = getTplText(that);
-                    if ('reload' == that.conf.act) {
+                    if ('reload' === that.conf.act) {
                         $(that).empty();
                     }
                     bind(res.rows, tpl_text, that, that.conf, 0);
@@ -104,7 +104,7 @@ require(['jquery'], function () {
                 } else {
                     targetValue = val[matKey];
                 }
-                html = html.replace(pat, targetValue != undefined ? targetValue : '');
+                html = html.replace(pat, targetValue !== undefined ? targetValue : '');
             });
         }
         if (html.indexOf('@{depth}') > -1) {
@@ -192,7 +192,7 @@ require(['jquery'], function () {
     $.fn.databindValue = function (conf) {
         var val = $(this).data('value');
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
-        if (typeof val != 'undefined' && val != null && val != '') {
+        if (typeof val != 'undefined' && val != null && val !== '') {
             var databindCreate = $(this).data('databind_create');
             if(databindCreate){
                 window[databindCreate].apply(this);
