@@ -72,7 +72,12 @@ require(['jquery'], function () {
         if (rows) {
             var index = 1;
             $.each(rows, function (key, val) {
-                window[options.beforeCreate] && window[options.beforeCreate](val, index);
+                if(typeof options.beforeCreate == 'function'){
+                    options.beforeCreate(val, index);
+                }else if(window[options.beforeCreate]){
+                    window[options.beforeCreate](val, index)
+                }
+
                 var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
@@ -210,7 +215,11 @@ require(['jquery'], function () {
         if (typeof afterCreate == 'function') {
             afterCreate.apply(this);
         } else if (afterCreate) {
-            window[afterCreate].apply(this);
+            if(typeof afterCreate == 'function'){
+                afterCreate.apply(this);
+            }else{
+                window[afterCreate].apply(this);
+            }
         }
     };
 

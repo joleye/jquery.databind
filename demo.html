@@ -23,6 +23,9 @@
     data-before_create="init">
 
 </ul>
+<ul class="data">
+
+</ul>
 <script type="text/html" id="tree-tpl">
     <li>
         <span>${name}</span>
@@ -40,7 +43,19 @@
 function init(params){
     params['date'] = new Date().getTime();
 }
-require(['databind'], function () {
+require(['jquery', 'databind'], function () {
+    setTimeout(function () {
+        $('.data').databind('load', {
+            tpl: 'tree-tpl',
+            url: 'tree.json',
+            beforeCreate: function (val, id) {
+                console.log(val, id);
+            },
+            afterCreate: function () {
+                console.log(this);
+            }
+        });
+    }, 100);
 
 });
 </script>
