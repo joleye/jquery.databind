@@ -48,6 +48,9 @@ require(['jquery'], function () {
                     var tpl_text = getTplText(that);
                     if ('reload' === that.conf.act) {
                         $(that).empty();
+                    }else if('model' === that.conf.act){
+                        bindModel(res.rows, that, that.conf);
+                        return;
                     }
                     bind(res.rows, tpl_text, that, that.conf, 0);
                     $(that).databindValue(that.conf);
@@ -84,6 +87,16 @@ require(['jquery'], function () {
                 if (children && val[children]) {
                     bind(val[children], tpl_text, that, options, depth + 1);
                 }
+            });
+        }
+    }
+
+    function bindModel(rows, that, options){
+        if (rows) {
+            $.each(rows, function (key, val) {
+                $.each(val, function (k1, v1) {
+                    $(that).find('[name='+k1+']').databindValue(v1);
+                });
             });
         }
     }
@@ -194,8 +207,8 @@ require(['jquery'], function () {
         return str.substring(0, depth * 5);
     }
 
-    $.fn.databindValue = function (conf) {
-        var val = $(this).data('value');
+    $.fn.databindValue = function (conf, value) {
+        var val = $(this).data('value') || value;
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
         if (typeof val != 'undefined' && val != null && val !== '') {
             var databindCreate = $(this).data('databind_create');

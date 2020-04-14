@@ -1,6 +1,8 @@
 ### this is jquery databind plugs
 
 ## 参数介绍
+act: load, reload, model(绑定)
+
 wait：延迟时间，单位毫秒，默认10毫秒
 
 url：数据接口地址
