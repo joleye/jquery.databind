@@ -2,7 +2,7 @@
  * v0.1初始版本
  * @author lee.zhang
  */
-require(['jquery'], function () {
+define(['jquery'], function () {
     $.fn.databind = function (act, opt) {
         this.conf = {
             act: act,
