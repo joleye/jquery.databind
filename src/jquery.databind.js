@@ -18,6 +18,13 @@ define(['jquery'], function () {
 
         this.conf = $.extend(this.conf, opt);
 
+        var _databind_conf = $(this).data('_databind_conf');
+        if(_databind_conf){
+            this.conf = $.extend(this.conf, _databind_conf);
+        }
+
+        $(this).data('_databind_conf', this.conf);
+
         var def = {
             page_size: this.conf.page_size,
             response: 'JSON'
