@@ -20,7 +20,7 @@ define(['jquery'], function () {
 
         var _databind_conf = $(this).data('_databind_conf');
         if(_databind_conf){
-            this.conf = $.extend(this.conf, _databind_conf);
+            this.conf = $.extend(_databind_conf, this.conf);
         }
 
         $(this).data('_databind_conf', this.conf);
