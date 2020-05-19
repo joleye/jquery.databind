@@ -103,9 +103,21 @@ define(['jquery'], function () {
         if (rows) {
             $.each(rows, function (key, val) {
                 $.each(val, function (k1, v1) {
-                    $(that).find('[name=' + k1 + ']').databindValue(options, v1);
+                    if(typeof v1 == 'object'){
+                        $.each(v1, function (k2, v2) {
+                            $(that).find('[name=' + k1 + ']').find('[name=' + k2 + ']').databindValue(options, v2);
+                        });
+                    }else {
+                        $(that).find('[name=' + k1 + ']').databindValue(options, v1);
+                    }
                 });
             });
+            if(options.success){
+                options.success(rows);
+            }
+        }
+        if(options.complete){
+            options.complete(rows);
         }
     }
 
