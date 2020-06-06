@@ -19,7 +19,7 @@ define(['jquery'], function () {
         this.conf = $.extend(this.conf, opt);
 
         var _databind_conf = $(this).data('_databind_conf');
-        if(_databind_conf){
+        if (_databind_conf) {
             this.conf = $.extend(_databind_conf, this.conf);
         }
 
@@ -53,7 +53,7 @@ define(['jquery'], function () {
             success: function (res) {
                 if (res.status) {
                     if ('model' === that.conf.act) {
-                        bindModel(res.rows, that, that.conf);
+                        bindModel(res, that, that.conf);
                         return;
                     }
                     var tpl_text = getTplText(that);
@@ -99,25 +99,27 @@ define(['jquery'], function () {
         }
     }
 
-    function bindModel(rows, that, options) {
+    function bindModel(res, that, options) {
+        var rows = res.rows;
         if (rows) {
             $.each(rows, function (key, val) {
                 $.each(val, function (k1, v1) {
-                    if(typeof v1 == 'object'){
+                    if (v1 == null) {
+                    } else if (typeof v1 == 'object') {
                         $.each(v1, function (k2, v2) {
                             $(that).find('[name=' + k1 + ']').find('[name=' + k2 + ']').databindValue(options, v2);
                         });
-                    }else {
+                    } else {
                         $(that).find('[name=' + k1 + ']').databindValue(options, v1);
                     }
                 });
             });
-            if(options.success){
-                options.success(rows);
+            if (options.success) {
+                options.success(rows, res);
             }
         }
-        if(options.complete){
-            options.complete(rows);
+        if (options.complete) {
+            options.complete(rows, res);
         }
     }
 
@@ -227,6 +229,16 @@ define(['jquery'], function () {
         return str.substring(0, depth * 5);
     }
 
+    $.fn.findValue = function (value) {
+        var ret = [];
+        this.each(function () {
+            if ($(this).val() === value) {
+                ret.push(this);
+            }
+        });
+        return new $(ret);
+    };
+
     $.fn.databindValue = function (conf, value) {
         var val = $(this).data('value') || value;
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
@@ -237,10 +249,15 @@ define(['jquery'], function () {
             } else {
                 var arr = (val + '').split(',');
                 var $this = $(this);
+                var nodeName = $this[0].nodeName.toLowerCase();
                 $.each(arr, function (i, v) {
-                    $this.val(v).trigger('select');
-                    $this.find('input[type=radio][value=' + v + ']').prop('checked', true);
-                    $this.find('input[type=checkbox][value=' + v + ']').prop('checked', true);
+                    if(nodeName === 'select'){
+                        $this.find('option').findValue(v).prop('selected', true);
+                    }else {
+                        $this.val(v).trigger('select');
+                        $this.find('input[type=radio]').findValue(v).prop('checked', true);
+                        $this.find('input[type=checkbox]').findValue(v).prop('checked', true);
+                    }
                 });
             }
         }
