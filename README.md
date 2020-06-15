@@ -17,6 +17,8 @@ afterCreate：接口回调方法，注意：html里面为data-after_create
 
 beforeCreate：创建之前回调方法，注意：html里面为data-before_create
 
+itemAfterCreate：单行创建时候方法，注意：html里面为data-item_after_create
+
 rows：数据
 
 ## 内置变量

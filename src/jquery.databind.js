@@ -13,7 +13,8 @@ define(['jquery'], function () {
             children: $(this).data('children'),
             param: $(this).data('param') || {},
             afterCreate: $(this).data('after_create') || null,
-            beforeCreate: $(this).data('before_create') || null
+            beforeCreate: $(this).data('before_create') || null,
+            itemAfterCreate: $(this).data('item_before_create') || null
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -94,6 +95,9 @@ define(['jquery'], function () {
                 var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
+                if (typeof options.itemAfterCreate == 'function') {
+                    options.itemAfterCreate.call($item, val, index);
+                }
                 if (children && val[children]) {
                     bind(val[children], tpl_text, that, options, depth + 1);
                 }
