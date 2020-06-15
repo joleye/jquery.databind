@@ -33,7 +33,9 @@ define(['jquery'], function () {
 
         if (!this.conf.url) {
             if (this.conf.rows) {
-                $(this).empty();
+                if ('reload' === this.conf.act) {
+                    $(this).empty();
+                }
                 bind(this.conf.rows, getTplText(this), this, this.conf, 0);
             }
             $(this).databindValue(this.conf);
@@ -249,7 +251,7 @@ define(['jquery'], function () {
             } else {
                 var arr = (val + '').split(',');
                 var $this = $(this);
-                var nodeName = $this[0].nodeName.toLowerCase();
+                var nodeName = $this.length > 0 ? $this[0].nodeName.toLowerCase() : '';
                 $.each(arr, function (i, v) {
                     if(nodeName === 'select'){
                         $this.find('option').findValue(v).prop('selected', true);
