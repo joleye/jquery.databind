@@ -246,7 +246,13 @@ define(['jquery'], function () {
     };
 
     $.fn.databindValue = function (conf, value) {
-        var val = $(this).data('value') || value;
+        var originalValue = $(this).data('value');
+        var val =  null;
+        if(typeof originalValue !== 'undefined'){
+            val = originalValue;
+        }else{
+            val = value;
+        }
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
         if (typeof val != 'undefined' && val != null && val !== '') {
             var databindCreate = $(this).data('databind_create');
