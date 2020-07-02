@@ -245,6 +245,17 @@ define(['jquery'], function () {
         return new $(ret);
     };
 
+    function isInput($this) {
+        if($this.length > 0) {
+            var that = $this[0];
+            var nodeName = that.nodeName.toLowerCase();
+            var nodeType = $this.attr('type');
+            return /input|textarea/.test(nodeName) && /text|hidden/.test(nodeType);
+        }else{
+            return false;
+        }
+    }
+
     $.fn.databindValue = function (conf, value) {
         var originalValue = $(this).data('value');
         var val =  null;
@@ -259,18 +270,22 @@ define(['jquery'], function () {
             if (databindCreate) {
                 window[databindCreate].apply(this);
             } else {
-                var arr = (val + '').split(',');
                 var $this = $(this);
-                var nodeName = $this.length > 0 ? $this[0].nodeName.toLowerCase() : '';
-                $.each(arr, function (i, v) {
-                    if(nodeName === 'select'){
-                        $this.find('option').findValue(v).prop('selected', true);
-                    }else {
-                        $this.val(v).trigger('select');
-                        $this.find('input[type=radio]').findValue(v).prop('checked', true);
-                        $this.find('input[type=checkbox]').findValue(v).prop('checked', true);
-                    }
-                });
+                if(isInput($this)){
+                    $this.val(val);
+                }else{
+                    var arr = (val + '').split(',');
+                    var nodeName = $this.length > 0 ? $this[0].nodeName.toLowerCase() : '';
+                    $.each(arr, function (i, v) {
+                        if(nodeName === 'select'){
+                            $this.find('option').findValue(v).prop('selected', true);
+                        }else {
+                            $this.val(v).trigger('select');
+                            $this.find('input[type=radio]').findValue(v).prop('checked', true);
+                            $this.find('input[type=checkbox]').findValue(v).prop('checked', true);
+                        }
+                    });
+                }
             }
         }
 
