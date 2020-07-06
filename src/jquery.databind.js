@@ -103,11 +103,11 @@ define(['jquery'], function () {
                 }
             });
             if (options.success) {
-                options.success(rows, res);
+                options.success(rows);
             }
         }
         if (options.complete) {
-            options.complete(rows, res);
+            options.complete(rows);
         }
     }
 
