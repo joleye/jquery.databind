@@ -102,6 +102,12 @@ define(['jquery'], function () {
                     bind(val[children], tpl_text, that, options, depth + 1);
                 }
             });
+            if (options.success) {
+                options.success(rows, res);
+            }
+        }
+        if (options.complete) {
+            options.complete(rows, res);
         }
     }
 
