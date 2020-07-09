@@ -274,7 +274,7 @@ define(['jquery'], function () {
         if (typeof val != 'undefined' && val != null && val !== '') {
             var databindCreate = $(this).data('databind_create');
             if (databindCreate) {
-                window[databindCreate].apply(this);
+                window[databindCreate] && window[databindCreate].apply(this);
             } else {
                 var $this = $(this);
                 if(isInput($this)){
@@ -301,7 +301,7 @@ define(['jquery'], function () {
             if (typeof afterCreate == 'function') {
                 afterCreate.apply(this);
             } else {
-                window[afterCreate].apply(this);
+                window[afterCreate] && window[afterCreate].apply(this);
             }
         }
     };
