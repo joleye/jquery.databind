@@ -137,7 +137,7 @@ define(['jquery'], function () {
 
     function getCommonTpl(tpl_text, key, val, headTag, depth, index) {
         var html = tpl_text;
-        var regGlobal = new RegExp(headTag + '\\{[\\w\\|]+\\}', 'g');
+        var regGlobal = new RegExp(headTag + '\\{[\\w\\|\\.]+\\}', 'g');
         var mat = html.match(regGlobal);
         if (mat) {
             mat.forEach(function (pat) {
@@ -152,6 +152,15 @@ define(['jquery'], function () {
                         } else {
                             targetValue = val[keyArr[1]];
                         }
+                    }
+                } else if(matKey.indexOf('.') > -1){
+                    var keyArrD = matKey.split('.');
+                    if (keyArrD.length > 1) {
+                        if (val[keyArrD[0]]) {
+                            targetValue = val[keyArrD[0]][keyArrD[1]];
+                        }
+                    }else{
+                        targetValue = val[matKey];
                     }
                 } else {
                     targetValue = val[matKey];

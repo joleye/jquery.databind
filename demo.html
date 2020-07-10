@@ -31,7 +31,7 @@
         <span>${name}</span>
         <span>${gender}</span>
         <span>${time}-${date}</span>
-        <span d-if="status != null">${status}</span>
+        <span d-if="status != null">${status.value}</span>
         <span d-if="tree != null">
             <select name="tree">
                 <option d-for="tree" value="#{id}" #{checked}>#{name}</option>

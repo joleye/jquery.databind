@@ -5,22 +5,27 @@
       "name": "小小一",
       "gender": "女",
       "time": "2020-1-1 10:10",
-      "status": 1111,
+      "status": {
+        "value": 1111
+      },
       "tree": null
     },
     {
       "name": "风信子",
       "gender": "男",
       "time": "2020-1-2 10:10",
-      "status": 222,
+      "status": {
+        "value": 222
+      },
       "tree": "xxx"
     },
     {
       "name": "余杭哲",
       "gender": "女",
       "time": "2020-1-3 10:10",
-      "status": [],
-      "value": 2,
+      "status": {
+        "value": 333
+      },
       "tree": [
         {
           "id": 1,
