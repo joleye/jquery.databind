@@ -4,6 +4,9 @@
  */
 define(['jquery'], function () {
     $.fn.databind = function (act, opt) {
+        if(this.length === 0){
+            return;
+        }
         this.conf = {
             act: act,
             url: $(this).data('url'),
