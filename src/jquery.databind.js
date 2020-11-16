@@ -204,7 +204,8 @@ define(['jquery'], function () {
 
     var act = {
         'd-if': function ($this, data, attrValue) {
-            var is_ok = (new Function("", stringify(data) + ";return " + attrValue))();
+            var size = data!= null && Object.keys(data).length;
+            var is_ok = (new Function("", stringify(data) + ";$size="+size+";return " + attrValue))();
             if (!is_ok) {
                 $this.remove();
             }
