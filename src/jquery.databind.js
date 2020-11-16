@@ -12,6 +12,7 @@ define(['jquery'], function () {
             url: $(this).data('url'),
             page_size: $(this).data('page_size'),
             tpl: $(this).data('tpl'),
+            none_tpl: $(this).data('none_tpl') || null,
             method: $(this).data('method') || 'POST',
             children: $(this).data('children'),
             param: $(this).data('param') || {},
@@ -41,6 +42,8 @@ define(['jquery'], function () {
                     $(this).empty();
                 }
                 bind(this.conf.rows, getTplText(this), this, this.conf, 0);
+            }else{
+                bindNone(this);
             }
             $(this).databindValue(this.conf);
         } else if (this.conf.url) {
@@ -75,8 +78,9 @@ define(['jquery'], function () {
 
     function getTplText(that) {
         var tpl_text;
-        if (that.conf.tpl) {
-            tpl_text = $('#' + that.conf.tpl).html();
+        var tpl_id = that.conf.tpl;
+        if (tpl_id) {
+            tpl_text = $('#' + tpl_id).html();
         } else {
             tpl_text = $(that).html();
             $(that).html('');
@@ -108,9 +112,19 @@ define(['jquery'], function () {
             if (options.success) {
                 options.success(rows);
             }
+        }else{
+            bindNone(that);
         }
         if (options.complete) {
             options.complete(rows);
+        }
+    }
+
+    function bindNone(that){
+        var tpl_id = that.conf.none_tpl;
+        if(tpl_id) {
+            var html = $('#' + tpl_id).html();
+            $(html).appendTo($(that));
         }
     }
 

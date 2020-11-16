@@ -9,6 +9,8 @@ url：数据接口地址
 
 tpl：模板id
 
+none_tpl：未找到数据模板id
+
 method：请求方法，GET、POST，默认POST
 
 param：数据接口请求参数
