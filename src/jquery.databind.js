@@ -2,7 +2,7 @@
  * v0.1初始版本
  * @author lee.zhang
  */
-define(['jquery'], function () {
+function jquery_databind() {
     $.fn.databind = function (act, opt) {
         if(this.length === 0){
             return;
@@ -342,4 +342,10 @@ define(['jquery'], function () {
         }
     }
 
-});
+}
+
+if(typeof define != 'undefined') {
+    define(['jquery'], jquery_databind);
+}else if(typeof $ != 'undefined'){
+    jquery_databind();
+}
