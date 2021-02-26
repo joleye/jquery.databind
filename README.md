@@ -3,6 +3,8 @@
 ## 参数介绍
 act: load, reload, model(绑定)
 
+interval 重新加载倒计时
+
 wait：延迟时间，单位毫秒，默认10毫秒
 
 url：数据接口地址

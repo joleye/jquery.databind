@@ -1,14 +1,22 @@
 /**
  * v0.1初始版本
+ * https://github.com/joleye/jquery.databind.git
  * @author lee.zhang
  */
 function jquery_databind() {
-    $.fn.databind = function (act, opt) {
+    /**
+     * 入口
+     * @param act 方法 load, reload, model(绑定)
+     * @param opt 选项
+     * @param interval 重新加载倒计时
+     */
+    $.fn.databind = function (act, opt, interval) {
         if(this.length === 0){
             return;
         }
         this.conf = {
             act: act,
+            interval: interval,
             url: $(this).data('url'),
             page_size: $(this).data('page_size'),
             tpl: $(this).data('tpl'),
@@ -47,6 +55,13 @@ function jquery_databind() {
             ajax.apply(this);
         } else {
             $(this).databindValue(this.conf);
+        }
+
+        if(interval){
+            var that = this;
+            setTimeout(function () {
+                $(that).databind('reload', opt, interval);
+            }, interval);
         }
     };
 
