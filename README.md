@@ -23,6 +23,11 @@ itemAfterCreate：单行创建时候方法，注意：html里面为data-item_aft
 
 rows：数据
 
+page: 分页配置，格式:{id: 'pageBox', prevText: '上一页', nextText: '下一页'},
+
+pageClick: 分页按钮点击事件，参数1：当前页号，注意：html里面为data-page_click
+
+
 ## 内置变量
 @{index} 行号，从1开始编号
 @{depth} 深度，有子节点时有效，默认：--|
