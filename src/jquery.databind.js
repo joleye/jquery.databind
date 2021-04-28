@@ -11,7 +11,7 @@ function jquery_databind() {
      * @param interval 重新加载倒计时
      */
     $.fn.databind = function (act, opt, interval) {
-        if(this.length === 0){
+        if (this.length === 0) {
             return;
         }
         this.conf = {
@@ -28,7 +28,8 @@ function jquery_databind() {
             beforeCreate: $(this).data('before_create') || null,
             itemAfterCreate: $(this).data('item_before_create') || null,
             page: $(this).data('page') || null,
-            pageClick: $(this).data('page_click') || null
+            pageClick: $(this).data('page_click') || null,
+            fail: $(this).data('fail') || null
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -62,7 +63,7 @@ function jquery_databind() {
             $(this).databindValue(this.conf);
         }
 
-        if(interval){
+        if (interval) {
             var that = this;
             setTimeout(function () {
                 $(that).databind('reload', opt, interval);
@@ -113,6 +114,8 @@ function jquery_databind() {
                             that.conf.pageClick(pageNo);
                         });
                     }
+                } else if (that.conf.fail) {
+                    that.conf.fail(res);
                 }
             }
         });
@@ -403,8 +406,8 @@ function jquery_databind() {
 
 }
 
-if(typeof define != 'undefined') {
+if (typeof define != 'undefined') {
     define(['jquery'], jquery_databind);
-}else if(typeof $ != 'undefined'){
+} else if (typeof $ != 'undefined') {
     jquery_databind();
 }
