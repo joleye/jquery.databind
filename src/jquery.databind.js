@@ -1,10 +1,10 @@
 /**
- * v0.1初始版本
+ * v0.2 初始版本
  * @author lee.zhang
  */
 define(['jquery'], function () {
     $.fn.databind = function (act, opt) {
-        if(this.length === 0){
+        if (this.length === 0) {
             return;
         }
         this.conf = {
@@ -18,7 +18,9 @@ define(['jquery'], function () {
             param: $(this).data('param') || {},
             afterCreate: $(this).data('after_create') || null,
             beforeCreate: $(this).data('before_create') || null,
-            itemAfterCreate: $(this).data('item_before_create') || null
+            itemAfterCreate: $(this).data('item_before_create') || null,
+            page: $(this).data('page') || null,
+            pageClick: $(this).data('page_click') || null
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -42,7 +44,7 @@ define(['jquery'], function () {
                     $(this).empty();
                 }
                 bind(this.conf.rows, getTplText(this), this, this.conf, 0);
-            }else{
+            } else {
                 bindNone(this);
             }
             $(this).databindValue(this.conf);
@@ -71,6 +73,31 @@ define(['jquery'], function () {
                     }
                     bind(res.rows, tpl_text, that, that.conf, 0);
                     $(that).databindValue(that.conf);
+
+                    //分页相关
+                    if (that.conf.page) {
+                        var id = that.conf.page.id;
+                        var prevText = that.conf.page.prevText || '上一页';
+                        var nextText = that.conf.page.nextText || '上一页';
+
+                        var pageStr = '<a href="javascript:void(0);" class="pageBtn" data-no="-1">' + prevText + '</a>' +
+                            '<span class="pageNo">' + res.data.pageNo + '</span>' +
+                            '<span>/</span>' +
+                            '<span class="totalPage">' + res.data.pageCount + '</span>' +
+                            '<a href="javascript:void(0);" class="pageBtn" data-no="1">' + nextText + '</a>';
+
+                        $('#' + id).empty().append(pageStr).find('a').on('click', function () {
+                            var step = parseInt($(this).data('no'));
+                            var pageNo = res.data.pageNo + step;
+                            if (pageNo < 1) {
+                                pageNo = 1;
+                            }
+                            if (pageNo > res.data.pageCount) {
+                                pageNo = res.data.pageCount;
+                            }
+                            that.conf.pageClick(pageNo);
+                        });
+                    }
                 }
             }
         });
@@ -112,7 +139,7 @@ define(['jquery'], function () {
             if (options.success) {
                 options.success(rows);
             }
-        }else{
+        } else {
             bindNone(that);
         }
         if (options.complete) {
@@ -120,9 +147,9 @@ define(['jquery'], function () {
         }
     }
 
-    function bindNone(that){
+    function bindNone(that) {
         var tpl_id = that.conf.none_tpl;
-        if(tpl_id) {
+        if (tpl_id) {
             var html = $('#' + tpl_id).html();
             $(html).appendTo($(that));
         }
@@ -154,6 +181,9 @@ define(['jquery'], function () {
 
     function getCommonTpl(tpl_text, key, val, headTag, depth, index) {
         var html = tpl_text;
+        if (!html) {
+            return '';
+        }
         var regGlobal = new RegExp(headTag + '\\{[\\w\\|\\.]+\\}', 'g');
         var mat = html.match(regGlobal);
         if (mat) {
@@ -170,13 +200,13 @@ define(['jquery'], function () {
                             targetValue = val[keyArr[1]];
                         }
                     }
-                } else if(matKey.indexOf('.') > -1){
+                } else if (matKey.indexOf('.') > -1) {
                     var keyArrD = matKey.split('.');
                     if (keyArrD.length > 1) {
                         if (val[keyArrD[0]]) {
                             targetValue = val[keyArrD[0]][keyArrD[1]];
                         }
-                    }else{
+                    } else {
                         targetValue = val[matKey];
                     }
                 } else {
@@ -218,8 +248,8 @@ define(['jquery'], function () {
 
     var act = {
         'd-if': function ($this, data, attrValue) {
-            var size = data!= null && Object.keys(data).length;
-            var is_ok = (new Function("", stringify(data) + ";$size="+size+";return " + attrValue))();
+            var size = data != null && Object.keys(data).length;
+            var is_ok = (new Function("", stringify(data) + ";$size=" + size + ";return " + attrValue))();
             if (!is_ok) {
                 $this.remove();
             }
@@ -279,22 +309,22 @@ define(['jquery'], function () {
     };
 
     function isInput($this) {
-        if($this.length > 0) {
+        if ($this.length > 0) {
             var that = $this[0];
             var nodeName = that.nodeName.toLowerCase();
             var nodeType = $this.attr('type');
             return /input|textarea/.test(nodeName) && /text|hidden/.test(nodeType);
-        }else{
+        } else {
             return false;
         }
     }
 
     $.fn.databindValue = function (conf, value) {
         var originalValue = $(this).data('value');
-        var val =  null;
-        if(typeof originalValue !== 'undefined'){
+        var val = null;
+        if (typeof originalValue !== 'undefined') {
             val = originalValue;
-        }else{
+        } else {
             val = value;
         }
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
@@ -304,15 +334,15 @@ define(['jquery'], function () {
                 window[databindCreate] && window[databindCreate].apply(this);
             } else {
                 var $this = $(this);
-                if(isInput($this)){
+                if (isInput($this)) {
                     $this.val(val);
-                }else{
+                } else {
                     var arr = (val + '').split(',');
                     var nodeName = $this.length > 0 ? $this[0].nodeName.toLowerCase() : '';
                     $.each(arr, function (i, v) {
-                        if(nodeName === 'select'){
+                        if (nodeName === 'select') {
                             $this.find('option').findValue(v).prop('selected', true);
-                        }else {
+                        } else {
                             $this.val(v).trigger('select');
                             $this.find('input[type=radio]').findValue(v).prop('checked', true);
                             $this.find('input[type=checkbox]').findValue(v).prop('checked', true);
