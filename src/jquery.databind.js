@@ -101,7 +101,7 @@ function jquery_databind() {
 
     function bind(rows, tpl_text, that, options, depth) {
         var children = options.children;
-        if (rows) {
+        if (rows && rows.length > 0) {
             var index = 1;
             $.each(rows, function (key, val) {
                 if (typeof options.beforeCreate == 'function') {
