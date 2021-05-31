@@ -48,7 +48,7 @@ function jquery_databind() {
         this.params = $.extend(def, this.conf.param);
 
         if (!this.conf.url) {
-            if (this.conf.rows) {
+            if (this.conf.rows && this.conf.rows.length > 0) {
                 if ('reload' === this.conf.act) {
                     $(this).empty();
                 }
@@ -175,7 +175,7 @@ function jquery_databind() {
 
     function bindModel(res, that, options) {
         var rows = res.rows;
-        if (rows) {
+        if (rows && rows.length > 0) {
             $.each(rows, function (key, val) {
                 $.each(val, function (k1, v1) {
                     if (v1 == null) {
@@ -191,6 +191,8 @@ function jquery_databind() {
             if (options.success) {
                 options.success(rows, res);
             }
+        }else{
+            bindNone(that);
         }
         if (options.complete) {
             options.complete(rows, res);
