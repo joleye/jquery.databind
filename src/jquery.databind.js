@@ -143,7 +143,7 @@ function jquery_databind() {
                 } else if (window[options.beforeCreate]) {
                     window[options.beforeCreate](val, index)
                 }
-
+                val['$index'] = index;
                 var html = getCommonTpl(tpl_text, key, val, '\\$', depth, index++);
                 var $item = $(html).appendTo($(that)).data('row', val);
                 bindEvent($item, val);
