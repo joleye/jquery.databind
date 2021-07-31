@@ -160,9 +160,9 @@ function jquery_databind() {
         } else {
             bindNone(that);
         }
-        if (options.complete) {
-            options.complete(rows);
-        }
+        // if (options.complete) {
+        //     options.complete(rows);
+        // }
     }
 
     function bindNone(that) {
@@ -191,7 +191,7 @@ function jquery_databind() {
             if (options.success) {
                 options.success(rows, res);
             }
-        }else{
+        } else {
             bindNone(that);
         }
         if (options.complete) {
@@ -381,31 +381,59 @@ function jquery_databind() {
                 window[afterCreate] && window[afterCreate].apply(this);
             }
         }
+
+        if (conf.complete) {
+            conf.complete(value);
+        }
     };
 
-    var runners = [];
+    //全局回调方法
+    var readyCallback = [];
 
-    $('.databind').each(function () {
-        var wait = typeof $(this).data('wait') != 'undefined' ? $(this).data('wait') : 10;
-        if (wait > 0) {
-            runners.push({value: this, wait: wait});
-        } else {
-            $(this).databind();
+    //全局回调入口
+    $.databindReady = function (callback) {
+        readyCallback.push(callback);
+    };
+
+    $(document).ready(function () {
+        var runners = [];
+
+        var $globalDatabind = $('.databind');
+
+        var completeCnt = $globalDatabind.length;
+        var globalOpt = {
+            complete: function () {
+                completeCnt--;
+                //console.log('completeCnt', completeCnt);
+                if (completeCnt === 0) {
+                    for (var i in readyCallback) {
+                        readyCallback[i]();
+                    }
+                }
+            }
+        };
+
+        $globalDatabind.each(function () {
+            var wait = typeof $(this).data('wait') != 'undefined' ? $(this).data('wait') : 10;
+            if (wait > 0) {
+                runners.push({value: this, wait: wait});
+            } else {
+                $(this).databind('load', globalOpt);
+            }
+        });
+
+        runner(0);
+
+        function runner(i) {
+            if (i < runners.length) {
+                var that = runners[i];
+                $(that.value).databind('load', globalOpt);
+                setTimeout(function () {
+                    runner(i + 1);
+                }, that.wait);
+            }
         }
     });
-
-    runner(0);
-
-    function runner(i) {
-        if (i < runners.length) {
-            var that = runners[i];
-            $(that.value).databind();
-            setTimeout(function () {
-                runner(i + 1);
-            }, that.wait);
-        }
-    }
-
 }
 
 if (typeof define != 'undefined') {
