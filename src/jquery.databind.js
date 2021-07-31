@@ -1,5 +1,5 @@
 /**
- * v0.2 初始版本
+ * v0.2.1 初始版本
  * https://github.com/joleye/jquery.databind.git
  * @author lee.zhang
  */
@@ -10,6 +10,12 @@ function jquery_databind() {
      * @param opt 选项
      * @param interval 重新加载倒计时
      */
+        //全局id
+    var global_databind_id = 0;
+
+    //调试标记
+    var debug = 0;
+
     $.fn.databind = function (act, opt, interval) {
         if (this.length === 0) {
             return;
@@ -33,6 +39,9 @@ function jquery_databind() {
         };
 
         this.conf = $.extend(this.conf, opt);
+        this.conf.id = global_databind_id;
+        debug && console.log('---', this.conf.id);
+        global_databind_id++;
 
         var _databind_conf = $(this).data('_databind_conf');
         if (_databind_conf) {
@@ -116,6 +125,13 @@ function jquery_databind() {
                     }
                 } else if (that.conf.fail) {
                     that.conf.fail(res);
+                    if (that.conf.complete) {
+                        that.conf.complete(res);
+                    }
+                }else{
+                    if (that.conf.complete) {
+                        that.conf.complete(res);
+                    }
                 }
             }
         });
@@ -340,6 +356,7 @@ function jquery_databind() {
     }
 
     $.fn.databindValue = function (conf, value) {
+        debug && console.log('+++', conf.id, conf, value);
         var originalValue = $(this).data('value');
         var val = null;
         if (typeof originalValue !== 'undefined') {
@@ -404,7 +421,7 @@ function jquery_databind() {
         var globalOpt = {
             complete: function () {
                 completeCnt--;
-                //console.log('completeCnt', completeCnt);
+                debug && console.log('completeCnt', completeCnt);
                 if (completeCnt === 0) {
                     for (var i in readyCallback) {
                         readyCallback[i]();
