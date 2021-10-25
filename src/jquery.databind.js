@@ -61,6 +61,10 @@ function jquery_databind() {
                 if ('reload' === this.conf.act) {
                     $(this).empty();
                 }
+                if ('model' === this.conf.act) {
+                    bindModel({rows: this.conf.rows}, this, this.conf);
+                    return;
+                }
                 bind(this.conf.rows, getTplText(this), this, this.conf, 0);
             } else {
                 bindNone(this);
