@@ -1,6 +1,6 @@
 ### this is jquery databind plugs
 
-## 参数介绍
+## 属性
 act: load, reload, model(绑定)
 
 interval 重新加载倒计时
@@ -16,6 +16,10 @@ none_tpl：未找到数据模板id
 method：请求方法，GET、POST，默认POST
 
 param：数据接口请求参数
+
+rigorous：强制标准
+
+## 方法
 
 afterCreate：接口回调方法，注意：html里面为data-after_create
 
@@ -36,7 +40,6 @@ fail: 加载错误时调用
 @{index} 行号，从1开始编号
 @{depth} 深度，有子节点时有效，默认：--|
 @{this} 当前节点值
-
 
 
 ## 使用方法

@@ -35,7 +35,8 @@ function jquery_databind() {
             itemAfterCreate: $(this).data('item_before_create') || null,
             page: $(this).data('page') || null,
             pageClick: $(this).data('page_click') || null,
-            fail: $(this).data('fail') || null
+            fail: $(this).data('fail') || null,
+            rigorous: false
         };
 
         this.conf = $.extend(this.conf, opt);
@@ -369,7 +370,13 @@ function jquery_databind() {
             val = value;
         }
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
-        if (typeof val != 'undefined' && val != null && val !== '') {
+        var is_bind = false;
+        if(conf.rigorous){
+            is_bind = conf.rigorous;
+        }else{
+            is_bind = val != null && val !== '';
+        }
+        if (typeof val != 'undefined' && is_bind) {
             var databindCreate = $(this).data('databind_create');
             if (databindCreate) {
                 window[databindCreate] && window[databindCreate].apply(this);
