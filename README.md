@@ -1,39 +1,28 @@
 ### this is jquery databind plugs
 
-## 属性
+## 属性，第一个参数
 act: load, reload, model(绑定)
 
-interval 重新加载倒计时
-
-wait：延迟时间，单位毫秒，默认10毫秒
-
-url：数据接口地址
-
-tpl：模板id
-
-none_tpl：未找到数据模板id
-
-method：请求方法，GET、POST，默认POST
-
-param：数据接口请求参数
-
-rigorous：强制标准
-
-## 方法
-
-afterCreate：接口回调方法，注意：html里面为data-after_create
-
-beforeCreate：创建之前回调方法，注意：html里面为data-before_create
-
-itemAfterCreate：单行创建时候方法，注意：html里面为data-item_after_create
-
-rows：数据
-
-page: 分页配置，格式:{id: 'pageBox', prevText: '上一页', nextText: '下一页'},
-
-pageClick: 分页按钮点击事件，参数1：当前页号，注意：html里面为data-page_click
-
-fail: 加载错误时调用
+## 属性，第二个参数
+| 方法 | 类型 | 说明 |
+|:----|----|:----|
+|interval|int| 重新加载倒计时
+|wait|int|延迟时间，单位毫秒，默认10毫秒
+|url|string|数据接口地址
+|tpl|string|模板id
+|none_tpl|string|未找到数据模板id
+|method|string|请求方法，GET、POST，默认POST
+|param|json|数据接口请求参数
+|rigorous|bool|强制标准
+|afterCreate|function|接口回调方法，注意：html里面为data-after_create|
+|beforeCreate|function|创建之前回调方法，注意：html里面为data-before_create|
+|itemAfterCreate|function|单行创建时候方法，注意：html里面为data-item_after_create|
+|rows|json|手动设置数据|
+|page|json|分页配置，格式:{id: 'pageBox', prevText: '上一页', nextText: '下一页'},|
+|pageClick|function|分页按钮点击事件，参数1：当前页号，注意：html里面为data-page_click|
+|fail|function|加载错误时调用|
+|success|function|加载成功时调用|
+|complete|function|加载完成时调用|
 
 
 ## 内置变量
