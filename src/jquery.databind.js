@@ -1,5 +1,5 @@
 /**
- * v0.2.1 初始版本
+ * v0.2.2 初始版本
  * https://github.com/joleye/jquery.databind.git
  * @author lee.zhang
  */
@@ -41,7 +41,7 @@ function jquery_databind() {
 
         this.conf = $.extend(this.conf, opt);
         this.conf.id = global_databind_id;
-        debug && console.log('---', this.conf.id);
+        debug && console.log('---> global_databind_id:', this.conf.id);
         global_databind_id++;
 
         var _databind_conf = $(this).data('_databind_conf');
@@ -133,7 +133,7 @@ function jquery_databind() {
                     if (that.conf.complete) {
                         that.conf.complete(res);
                     }
-                }else{
+                } else {
                     if (that.conf.complete) {
                         that.conf.complete(res);
                     }
@@ -156,7 +156,7 @@ function jquery_databind() {
 
     function bind(rows, tpl_text, that, options, depth) {
         var children = options.children;
-        if (rows && ((rows instanceof Array && rows.length > 0 ) || (typeof rows === 'object' && Object.keys(rows).length > 0))) {
+        if (rows && ((rows instanceof Array && rows.length > 0) || (typeof rows === 'object' && Object.keys(rows).length > 0))) {
             var index = 1;
             $.each(rows, function (key, val) {
                 if (typeof options.beforeCreate == 'function') {
@@ -361,7 +361,7 @@ function jquery_databind() {
     }
 
     $.fn.databindValue = function (conf, value) {
-        debug && console.log('+++', conf.id, conf, value);
+        debug && console.log('+++ start databindValue id:', conf.id, conf, value);
         var originalValue = $(this).data('value');
         var val = null;
         if (typeof originalValue !== 'undefined') {
@@ -371,9 +371,9 @@ function jquery_databind() {
         }
         var afterCreate = $(this).data('after_create') || conf.afterCreate || null;
         var is_bind = false;
-        if(conf.rigorous){
+        if (conf.rigorous) {
             is_bind = conf.rigorous;
-        }else{
+        } else {
             is_bind = val != null && val !== '';
         }
         if (typeof val != 'undefined' && is_bind) {
@@ -418,14 +418,26 @@ function jquery_databind() {
     //全局回调方法
     var readyCallback = [];
 
+    //全局回调是否完成
+    var readyCallbackComplete = false;
+
     //全局回调入口
     $.databindReady = function (callback) {
         readyCallback.push(callback);
+        if(readyCallbackComplete){
+            startReadyCallback();
+        }
     };
+
+    function startReadyCallback(){
+        for (var i in readyCallback) {
+            debug && console.log('readyCallback2', i);
+            readyCallback[i]();
+        }
+    }
 
     $(document).ready(function () {
         var runners = [];
-
         var $globalDatabind = $('.databind');
 
         var completeCnt = $globalDatabind.length;
@@ -434,9 +446,11 @@ function jquery_databind() {
                 completeCnt--;
                 debug && console.log('completeCnt', completeCnt);
                 if (completeCnt === 0) {
-                    for (var i in readyCallback) {
-                        readyCallback[i]();
-                    }
+                    debug && console.log('complete:', completeCnt, 'readyCallback size:', readyCallback.length);
+                    startReadyCallback();
+                    readyCallbackComplete = true;
+                } else {
+                    debug && console.log('wait completeCnt:', completeCnt);
                 }
             }
         };
@@ -450,11 +464,14 @@ function jquery_databind() {
             }
         });
 
+        debug && console.log('globalDatabind size:', $globalDatabind.length);
+
         runner(0);
 
         function runner(i) {
             if (i < runners.length) {
                 var that = runners[i];
+                debug && console.log('runner i', i, 'runners size:', runners.length);
                 $(that.value).databind('load', globalOpt);
                 setTimeout(function () {
                     runner(i + 1);
