@@ -1,5 +1,5 @@
 /**
- * v0.2.2 初始版本
+ * v0.2.3 初始版本
  * https://github.com/joleye/jquery.databind.git
  * @author lee.zhang
  */
@@ -27,6 +27,7 @@ function jquery_databind() {
             page_size: $(this).data('page_size'),
             tpl: $(this).data('tpl'),
             none_tpl: $(this).data('none_tpl') || null,
+            htpl: $(this).data('htpl') || null,//文件头
             method: $(this).data('method') || 'POST',
             children: $(this).data('children'),
             param: $(this).data('param') || {},
@@ -158,6 +159,7 @@ function jquery_databind() {
         var children = options.children;
         if (rows && ((rows instanceof Array && rows.length > 0) || (typeof rows === 'object' && Object.keys(rows).length > 0))) {
             var index = 1;
+            bindHead(that);
             $.each(rows, function (key, val) {
                 if (typeof options.beforeCreate == 'function') {
                     options.beforeCreate(val, index);
@@ -184,6 +186,14 @@ function jquery_databind() {
         // if (options.complete) {
         //     options.complete(rows);
         // }
+    }
+
+    function bindHead(that) {
+        var htpl_id = that.conf.htpl;
+        if (htpl_id) {
+            var html = $('#' + htpl_id).html();
+            $(html).appendTo($(that));
+        }
     }
 
     function bindNone(that) {
