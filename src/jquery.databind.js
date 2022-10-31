@@ -199,6 +199,7 @@ function jquery_databind() {
     function bindNone(that) {
         var tpl_id = that.conf.none_tpl;
         if (tpl_id) {
+            $(that).empty();
             var html = $('#' + tpl_id).html();
             $(html).appendTo($(that));
         }
